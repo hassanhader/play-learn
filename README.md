@@ -12,10 +12,6 @@
 **Professeur :** Mr William Flageol
 **Chargé de laboratoire :** M…
 
-## Lien du rojet
-https://github.com/wflageol-uqtr/projet-de-session-equipe-8
-
-
 ## Description du Projet
 
 **Play&Learn** est une plateforme web éducative complète offrant des expériences d'apprentissage interactives à travers des jeux quiz en modes **solo** et **multijoueur temps réel**. Le projet combine une architecture **Frontend React moderne** avec un **Backend Node.js robuste**, communiquant via **REST API** et **WebSocket** pour les interactions temps réel.
