@@ -12,19 +12,6 @@
 **Professeur :** Mr William Flageol
 **Chargé de laboratoire :** M…
 
-### Membres du Groupe
-
-| Nom                      | Code Permanent |
-| ------------------------ | -------------- |
-| Jean Thierry Lalong      | LALJ01379200   |
-| Divine Masala Bikakala   | BIKD68270400   |
-| Mohamed Heni Baabaa      | BAAM79260100   |
-| Guo Yimin                | GUOY63260000   |
-| Mohamadou Khadafi Hassan | MOHK93280200   |
-| Hassan Hader             | HADH09289500   |
-
----
-
 ## Lien du rojet
 https://github.com/wflageol-uqtr/projet-de-session-equipe-8
 
