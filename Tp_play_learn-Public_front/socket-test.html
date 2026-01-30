@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Socket.io Test - Game Start</title>
+  <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+    .container {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 30px;
+      border-radius: 16px;
+      backdrop-filter: blur(10px);
+    }
+    input, button {
+      padding: 12px;
+      margin: 8px 0;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+    input {
+      width: calc(100% - 24px);
+      background: rgba(255, 255, 255, 0.9);
+    }
+    button {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+      cursor: pointer;
+      font-weight: 600;
+      transition: transform 0.2s;
+    }
+    button:hover {
+      transform: translateY(-2px);
+    }
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .log {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 20px;
+      max-height: 400px;
+      overflow-y: auto;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+    }
+    .log-entry {
+      margin: 5px 0;
+      padding: 5px;
+      border-left: 3px solid #10b981;
+      padding-left: 10px;
+    }
+    .log-entry.error {
+      border-left-color: #ef4444;
+      color: #fca5a5;
+    }
+    .log-entry.success {
+      border-left-color: #10b981;
+      color: #86efac;
+    }
+    .log-entry.info {
+      border-left-color: #3b82f6;
+      color: #93c5fd;
+    }
+    .status {
+      padding: 10px;
+      border-radius: 8px;
+      margin: 10px 0;
+      text-align: center;
+      font-weight: 600;
+    }
+    .status.connected {
+      background: rgba(16, 185, 129, 0.3);
+    }
+    .status.disconnected {
+      background: rgba(239, 68, 68, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🧪 Socket.io Game Start Tester</h1>
+    
+    <div id="status" class="status disconnected">
+      ❌ Disconnected
+    </div>
+
+    <div>
+      <label>Backend URL:</label>
+      <input type="text" id="backendUrl" value="http://localhost:5000" placeholder="http://localhost:5000">
+    </div>
+
+    <div>
+      <label>Room Code:</label>
+      <input type="text" id="roomCode" placeholder="ABC123">
+    </div>
+
+    <div>
+      <label>User ID:</label>
+      <input type="number" id="userId" value="999" placeholder="999">
+    </div>
+
+    <div>
+      <label>Username:</label>
+      <input type="text" id="username" value="TestUser" placeholder="TestUser">
+    </div>
+
+    <button id="connectBtn">🔌 Connect</button>
+    <button id="joinRoomBtn" disabled>📥 Join Room</button>
+    <button id="startGameBtn" disabled>🚀 Start Game</button>
+    <button id="clearLogsBtn">🗑️ Clear Logs</button>
+
+    <div class="log" id="logs"></div>
+  </div>
+
+  <script>
+    let socket = null;
+    let isConnected = false;
+
+    const statusDiv = document.getElementById('status');
+    const logsDiv = document.getElementById('logs');
+    const connectBtn = document.getElementById('connectBtn');
+    const joinRoomBtn = document.getElementById('joinRoomBtn');
+    const startGameBtn = document.getElementById('startGameBtn');
+    const clearLogsBtn = document.getElementById('clearLogsBtn');
+
+    function log(message, type = 'info') {
+      const entry = document.createElement('div');
+      entry.className = `log-entry ${type}`;
+      const timestamp = new Date().toLocaleTimeString();
+      entry.textContent = `[${timestamp}] ${message}`;
+      logsDiv.appendChild(entry);
+      logsDiv.scrollTop = logsDiv.scrollHeight;
+      console.log(message);
+    }
+
+    function updateStatus(connected) {
+      isConnected = connected;
+      if (connected) {
+        statusDiv.className = 'status connected';
+        statusDiv.textContent = '✅ Connected';
+        connectBtn.textContent = '🔌 Disconnect';
+        joinRoomBtn.disabled = false;
+      } else {
+        statusDiv.className = 'status disconnected';
+        statusDiv.textContent = '❌ Disconnected';
+        connectBtn.textContent = '🔌 Connect';
+        joinRoomBtn.disabled = true;
+        startGameBtn.disabled = true;
+      }
+    }
+
+    connectBtn.addEventListener('click', () => {
+      if (socket && isConnected) {
+        log('Disconnecting...', 'info');
+        socket.disconnect();
+        socket = null;
+        updateStatus(false);
+        return;
+      }
+
+      const backendUrl = document.getElementById('backendUrl').value;
+      log(`Connecting to ${backendUrl}...`, 'info');
+
+      socket = io(backendUrl, {
+        transports: ['websocket', 'polling'],
+        withCredentials: true
+      });
+
+      socket.on('connect', () => {
+        log('✅ Connected to Socket.io server!', 'success');
+        updateStatus(true);
+      });
+
+      socket.on('disconnect', () => {
+        log('❌ Disconnected from server', 'error');
+        updateStatus(false);
+      });
+
+      socket.on('connect_error', (error) => {
+        log(`❌ Connection error: ${error.message}`, 'error');
+        updateStatus(false);
+      });
+
+      // Listen for all possible game start events
+      socket.on('game-started', (data) => {
+        log(`🎮 Received 'game-started': ${JSON.stringify(data)}`, 'success');
+      });
+
+      socket.on('start-game-broadcast', (data) => {
+        log(`📢 Received 'start-game-broadcast': ${JSON.stringify(data)}`, 'success');
+      });
+
+      socket.on('gameStarted', (data) => {
+        log(`🎮 Received 'gameStarted' (legacy): ${JSON.stringify(data)}`, 'success');
+      });
+
+      socket.on('room-updated', (data) => {
+        log(`📡 Received 'room-updated': ${JSON.stringify(data)}`, 'info');
+      });
+
+      socket.on('playerJoined', (data) => {
+        log(`👥 Player joined: ${JSON.stringify(data)}`, 'info');
+      });
+
+      socket.on('error', (error) => {
+        log(`❌ Socket error: ${JSON.stringify(error)}`, 'error');
+      });
+
+      socket.onAny((eventName, ...args) => {
+        log(`📨 Event received: ${eventName} - ${JSON.stringify(args)}`, 'info');
+      });
+    });
+
+    joinRoomBtn.addEventListener('click', () => {
+      if (!socket || !isConnected) {
+        log('❌ Not connected to server', 'error');
+        return;
+      }
+
+      const roomCode = document.getElementById('roomCode').value;
+      const userId = parseInt(document.getElementById('userId').value);
+      const username = document.getElementById('username').value;
+
+      if (!roomCode) {
+        log('❌ Please enter a room code', 'error');
+        return;
+      }
+
+      log(`📥 Joining room: ${roomCode} as ${username} (ID: ${userId})`, 'info');
+      
+      socket.emit('join-room', { roomCode, userId, username });
+      socket.emit('joinRoom', { roomCode, userId, username }); // Legacy format
+      
+      log('✅ Join room events emitted', 'success');
+      startGameBtn.disabled = false;
+    });
+
+    startGameBtn.addEventListener('click', () => {
+      if (!socket || !isConnected) {
+        log('❌ Not connected to server', 'error');
+        return;
+      }
+
+      const roomCode = document.getElementById('roomCode').value;
+      const userId = parseInt(document.getElementById('userId').value);
+
+      if (!roomCode) {
+        log('❌ Please enter a room code', 'error');
+        return;
+      }
+
+      log(`🚀 Emitting game start for room: ${roomCode}`, 'info');
+      
+      // Try all possible event formats
+      const timestamp = Date.now();
+      
+      // New format
+      socket.emit('start-game', { roomCode, hostId: userId, timestamp });
+      log('📤 Emitted: start-game (new format)', 'info');
+      
+      // Legacy format
+      socket.emit('startGame', { roomCode, userId });
+      log('📤 Emitted: startGame (legacy format)', 'info');
+      
+      log('⏳ Waiting for server response...', 'info');
+    });
+
+    clearLogsBtn.addEventListener('click', () => {
+      logsDiv.innerHTML = '';
+      log('Logs cleared', 'info');
+    });
+
+    // Initial log
+    log('🧪 Socket.io Game Start Tester Ready', 'success');
+    log('Instructions:', 'info');
+    log('1. Enter your backend URL (default: http://localhost:5000)', 'info');
+    log('2. Click Connect', 'info');
+    log('3. Enter a room code from your app', 'info');
+    log('4. Click Join Room', 'info');
+    log('5. Click Start Game and watch for events', 'info');
+  </script>
+</body>
+</html>

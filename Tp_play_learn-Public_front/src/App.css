@@ -1,0 +1,35 @@
+/* Global app styles - clean and minimal */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden; 
+}
+
+body {
+  font-family: system-ui, -apple-system, 'Segoe UI', 'Inter', sans-serif;
+  background: linear-gradient(180deg, #0f1020 0%, #1b1f3b 100%);
+  background-attachment: fixed;
+  color: #e8eaf6;
+  min-height: 100vh;
+  width: 100%; 
+}
+
+#root {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Remove default nav from App.jsx - each page handles its own header */
+.app-header {
+  display: none;
+}

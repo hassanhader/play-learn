@@ -1,0 +1,370 @@
+.multiplayer-speedmath-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  padding: 20px;
+}
+
+/* Header - Reuse from QuizGame */
+.game-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: white;
+  padding: 16px 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.header-left, .header-center, .header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.leave-btn {
+  background: #f44336;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.progress {
+  background: var(--primary);
+  color: white;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+.timer {
+  background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
+  color: white;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+/* Game Content */
+.game-content {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 20px;
+  min-height: calc(100vh - 140px);
+}
+
+/* Live Scoreboard */
+.live-scoreboard {
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  height: fit-content;
+  position: sticky;
+  top: 20px;
+}
+
+.live-scoreboard h3 {
+  margin: 0 0 16px 0;
+  color: var(--primary);
+  font-size: 18px;
+}
+
+.scores-table {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.score-row {
+  display: grid;
+  grid-template-columns: 40px 1fr 40px 60px;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: var(--bg);
+  border-radius: 8px;
+  border: 2px solid transparent;
+  transition: all 0.2s;
+}
+
+.score-row.current-user {
+  background: linear-gradient(135deg, #a8e6cf, #81c784);
+  border-color: #66bb6a;
+  font-weight: 600;
+}
+
+.rank {
+  font-weight: 700;
+  color: var(--primary);
+  font-size: 14px;
+}
+
+.player-name {
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.disconnected-badge {
+  margin-left: 4px;
+  font-size: 12px;
+}
+
+.status {
+  font-size: 20px;
+  text-align: center;
+}
+
+.score {
+  background: var(--primary);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-weight: 700;
+  text-align: center;
+  font-size: 14px;
+}
+
+/* Question Panel */
+.question-panel {
+  background: white;
+  border-radius: 16px;
+  padding: 40px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.math-question {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  color: white;
+  padding: 60px 40px;
+  border-radius: 16px;
+  text-align: center;
+}
+
+.question-text {
+  font-size: 48px;
+  font-weight: 900;
+  margin: 0;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 4px;
+}
+
+/* Answer Input */
+.answer-input-section {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.answer-input {
+  flex: 1;
+  padding: 20px 24px;
+  font-size: 24px;
+  border: 3px solid var(--border);
+  border-radius: 12px;
+  font-family: 'Courier New', monospace;
+  font-weight: 700;
+  text-align: center;
+  transition: all 0.2s;
+}
+
+.answer-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+}
+
+.answer-input:disabled {
+  background: #f5f5f5;
+  cursor: not-allowed;
+}
+
+.submit-btn {
+  padding: 20px 40px;
+  background: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.submit-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(76, 175, 80, 0.4);
+}
+
+.submit-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+/* Waiting Message */
+.waiting-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 40px;
+  color: var(--muted);
+}
+
+.spinner-small {
+  width: 30px;
+  height: 30px;
+  border: 3px solid var(--bg);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Answer Result */
+.answer-result {
+  padding: 24px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 18px;
+  font-weight: 600;
+  animation: slideIn 0.3s ease-out;
+}
+
+.answer-result.correct {
+  background: linear-gradient(135deg, #a8e6cf, #81c784);
+  color: #2e7d32;
+}
+
+.answer-result.incorrect {
+  background: linear-gradient(135deg, #ffccbc, #ef9a9a);
+  color: #c62828;
+}
+
+.result-icon {
+  font-size: 32px;
+  font-weight: 900;
+}
+
+/* Results Reveal */
+.results-reveal {
+  background: var(--bg);
+  padding: 24px;
+  border-radius: 12px;
+  animation: slideIn 0.3s ease-out;
+}
+
+.results-reveal h3 {
+  margin: 0 0 16px 0;
+  color: var(--primary);
+}
+
+.correct-answer {
+  background: linear-gradient(135deg, #a8e6cf, #81c784);
+  color: #2e7d32;
+  padding: 16px;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.players-answers {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.player-answer {
+  display: grid;
+  grid-template-columns: 1fr auto 40px;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.player-answer.correct {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.player-answer.incorrect {
+  background: #ffebee;
+  color: #c62828;
+}
+
+.answer-given {
+  font-family: 'Courier New', monospace;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+/* Loading */
+.loading-question {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px;
+  gap: 20px;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid var(--bg);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 968px) {
+  .game-content {
+    grid-template-columns: 1fr;
+  }
+
+  .live-scoreboard {
+    position: static;
+  }
+
+  .question-text {
+    font-size: 36px;
+  }
+
+  .answer-input-section {
+    flex-direction: column;
+  }
+
+  .submit-btn {
+    width: 100%;
+  }
+}

@@ -1,0 +1,62 @@
+=== CORRECTION FINALE POUR adminController.js ===
+
+PROBLÈME IDENTIFIÉ:
+La table "questions" n'a PAS de colonne "gameId" !
+Structure: Game → Level → Question
+- Question a seulement "levelId" (pas "gameId")
+- Level a "gameId"
+
+FICHIER: Tp_play_learn-Public_back\controllers\adminController.js
+
+LIGNES 230-242 - REMPLACER:
+
+```javascript
+      // Calculer des statistiques pour chaque jeu
+      const gamesWithStats = await Promise.all(games.map(async (game) => {
+        const gameJson = game.toJSON()
+        
+        // Compter les questions directement liées au jeu
+        const questionCount = await Question.count({
+          where: { gameId: game.id }
+        })
+        
+        // Compter les levels
+        const levelCount = await Level.count({
+          where: { gameId: game.id }
+        })
+```
+
+PAR:
+
+```javascript
+      // Calculer des statistiques pour chaque jeu
+      const gamesWithStats = await Promise.all(games.map(async (game) => {
+        const gameJson = game.toJSON()
+        
+        // Compter les levels liés au jeu
+        const levelCount = await Level.count({
+          where: { gameId: game.id }
+        })
+        
+        // Compter les questions via les levels (pas de relation directe Question->Game)
+        const questionCount = await Question.count({
+          include: [{
+            model: Level,
+            as: 'level',
+            where: { gameId: game.id },
+            attributes: []
+          }]
+        })
+```
+
+EXPLICATION:
+Puisque Question n'a pas de gameId, on doit:
+1. Faire un JOIN avec Level
+2. Filtrer Level par gameId
+3. Compter les Questions qui correspondent
+
+APRÈS MODIFICATION:
+1. Sauvegardez adminController.js
+2. Redémarrez le serveur: node server.js
+3. Rafraîchissez le navigateur
+4. Les jeux devraient maintenant s'afficher !

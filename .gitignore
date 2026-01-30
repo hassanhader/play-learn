@@ -1,0 +1,61 @@
+# Dependencies
+Tp_play_learn-Public_back/node_modules/
+
+# Environment variables
+Tp_play_learn-Public_back/.env
+
+# Database
+Tp_play_learn-Public_back/database.sqlite
+Tp_play_learn-Public_back/database.sqlite-journal
+
+# Logs
+Tp_play_learn-Public_back/logs
+Tp_play_learn-Public_back/*.log
+Tp_play_learn-Public_back/npm-debug.log*
+Tp_play_learn-Public_back/yarn-debug.log*
+Tp_play_learn-Public_back/yarn-error.log*
+
+# OS files
+Tp_play_learn-Public_back/.DS_Store
+Tp_play_learn-Public_back/Thumbs.db
+
+# IDE
+Tp_play_learn-Public_back/.vscode/
+Tp_play_learn-Public_back/.idea/
+Tp_play_learn-Public_back/*.swp
+Tp_play_learn-Public_back/*.swo
+
+# Build
+Tp_play_learn-Public_back/dist/
+Tp_play_learn-Public_back/build/
+
+
+
+
+# Logs
+Tp_play_learn-Public_front/logs
+Tp_play_learn-Public_front/*.log
+Tp_play_learn-Public_front/npm-debug.log*
+Tp_play_learn-Public_front/yarn-debug.log*
+Tp_play_learn-Public_front/yarn-error.log*
+Tp_play_learn-Public_front/pnpm-debug.log*
+Tp_play_learn-Public_front/lerna-debug.log*
+
+Tp_play_learn-Public_front/node_modules
+Tp_play_learn-Public_front/dist
+Tp_play_learn-Public_front/dist-ssr
+Tp_play_learn-Public_front/*.local
+
+# Backend folder
+Tp_play_learn-Public_front/Tp_play_learn-Public_back
+
+# Editor directories and files
+Tp_play_learn-Public_front/.vscode/*
+Tp_play_learn-Public_front/!.vscode/extensions.json
+Tp_play_learn-Public_front/.idea
+Tp_play_learn-Public_front/.DS_Store
+Tp_play_learn-Public_front/*.suo
+Tp_play_learn-Public_front/*.ntvs*
+Tp_play_learn-Public_front/*.njsproj
+Tp_play_learn-Public_front/*.sln
+Tp_play_learn-Public_front/*.sw?

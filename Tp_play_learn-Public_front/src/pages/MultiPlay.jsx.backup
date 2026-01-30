@@ -1,0 +1,152 @@
+import React, { useState, useEffect } from 'react'
+import '../styles/multi-play.css'
+import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../contexts/AuthContext'
+
+export default function MultiPlay(){
+  const { username: authUsername, logout } = useAuth()
+  const username = authUsername || localStorage.getItem('username') || 'username'
+  const navigate = useNavigate()
+  const [isReady, setIsReady] = useState(false)
+  const [message, setMessage] = useState('')
+  const [messages, setMessages] = useState([
+    { user: 'System', text: 'Welcome to the room!' },
+    { user: 'Alice', text: 'Hey everyone!' }
+  ])
+  const [players] = useState([
+    { name: username, status: 'waiting', isHost: true },
+    { name: 'Alice', status: 'ready', isHost: false },
+    { name: 'Bob', status: 'waiting', isHost: false }
+  ])
+
+  const handleLogout = () => {
+    if (confirm('Are you sure you want to logout?')) {
+      logout()
+      navigate('/login', { replace: true })
+    }
+  }
+
+  function toggleReady() {
+    setIsReady(!isReady)
+    const statusText = !isReady ? 'is ready!' : 'is not ready anymore'
+    setMessages(prev => [...prev, { user: 'System', text: `${username} ${statusText}` }])
+  }
+
+  function sendMessage() {
+    if (!message.trim()) return
+    setMessages(prev => [...prev, { user: username, text: message }])
+    setMessage('')
+  }
+
+  function startGame() {
+    console.log('Starting multiplayer game...')
+    alert('Game started!')
+  }
+
+  const allReady = players.every(p => p.name === username ? isReady : p.status === 'ready')
+
+  return (
+    <div className="multi-wrap">
+      <header className="topbar">
+        <button className="back" onClick={()=>navigate('/lobby')}>← Back</button>
+        <h1 className="brand">Room: Physics Masters</h1>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div className="room-info">Mathematics • Normal • 3/4</div>
+          <button 
+            onClick={handleLogout}
+            style={{
+              background: '#ff6b6b',
+              color: 'white',
+              border: 'none',
+              borderRadius: '6px',
+              padding: '6px 12px',
+              fontSize: '12px',
+              cursor: 'pointer'
+            }}
+          >
+            Déconnexion
+          </button>
+        </div>
+      </header>
+
+      <main className="wrap">
+        <div className="grid">
+          {/* Game board */}
+          <section className="panel">
+            <h2>Game Board</h2>
+            <div className="game-board">
+              <div className="waiting">
+                {allReady ? 'All players ready! Host can start the game.' : 'Waiting for players to be ready...'}
+              </div>
+            </div>
+          </section>
+
+          {/* Sidebar */}
+          <div>
+            {/* Players */}
+            <section className="panel">
+              <h2>Players ({players.length}/4)</h2>
+              <ul className="players">
+                {players.map((player, i) => (
+                  <li key={i} className="player">
+                    <span className="player-name">{player.name}</span>
+                    <span className={`player-status ${
+                      player.name === username 
+                        ? (isReady ? 'ready' : 'waiting-status')
+                        : player.status === 'ready' 
+                          ? 'ready' 
+                          : 'waiting-status'
+                    }`}>
+                      {player.isHost ? 'Host' : 
+                       (player.name === username ? (isReady ? 'Ready' : 'Waiting') : 
+                        player.status === 'ready' ? 'Ready' : 'Waiting')}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+
+            {/* Chat */}
+            <section className="panel">
+              <h2>Chat</h2>
+              <div className="chat">
+                <div className="messages">
+                  {messages.map((msg, i) => (
+                    <div key={i} className="message">
+                      <span className="message-user">{msg.user}:</span>{' '}
+                      <span className="message-text">{msg.text}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="chat-input">
+                  <input 
+                    type="text" 
+                    className="input"
+                    value={message}
+                    onChange={e => setMessage(e.target.value)}
+                    onKeyDown={e => e.key === 'Enter' && sendMessage()}
+                    placeholder="Type a message..."
+                  />
+                  <button className="send" onClick={sendMessage}>Send</button>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </main>
+
+      <div className="actions">
+        <button className={`ready-btn ${isReady ? 'ready' : ''}`} onClick={toggleReady}>
+          {isReady ? 'Not Ready' : 'Ready'}
+        </button>
+        <button 
+          className="start-btn" 
+          onClick={startGame}
+          disabled={!allReady}
+        >
+          Start Game
+        </button>
+      </div>
+    </div>
+  )
+}

@@ -1,0 +1,50 @@
+=== DIAGNOSTIC POUR TROUVER LE NOM DE LA COLONNE ===
+
+Le problème est que nous ne savons pas quel est le nom exact de la colonne 
+qui relie les questions/levels aux games dans la base de données.
+
+ÉTAPES À SUIVRE:
+
+1. Ouvrez MySQL Workbench ou votre client MySQL
+
+2. Connectez-vous à la base de données: DB_play_and_learn
+
+3. Exécutez ces 3 requêtes SQL:
+
+   SHOW COLUMNS FROM questions;
+   SHOW COLUMNS FROM levels;
+   SHOW COLUMNS FROM games;
+
+4. Cherchez dans les résultats:
+   - Dans "questions": une colonne qui contient "game" (peut-être: gameId, game_id, game, etc.)
+   - Dans "levels": une colonne qui contient "game" (peut-être: gameId, game_id, game, etc.)
+   - Dans "games": les colonnes "id" et "gameId"
+
+5. Une fois trouvé, modifiez le fichier:
+   Tp_play_learn-Public_back\controllers\adminController.js
+   
+   Aux lignes 235 et 240, remplacez:
+   where: { gameId: game.gameId }
+   
+   PAR (selon ce que vous trouvez):
+   where: { NOM_COLONNE_TROUVEE: game.gameId }
+   
+   OU
+   where: { NOM_COLONNE_TROUVEE: game.id }
+
+EXEMPLE:
+Si vous trouvez que la colonne s'appelle "game_id" dans questions et levels,
+et qu'elle référence le champ "id" de games, alors utilisez:
+
+   where: { game_id: game.id }
+
+Si elle s'appelle "gameId" et référence le champ "gameId" de games, utilisez:
+
+   where: { gameId: game.gameId }
+
+===================================================
+
+ALTERNATIVE RAPIDE:
+Allez dans le fichier Tp_play_learn-Public_back\controllers\gamesController.js
+et cherchez comment les autres fonctions font leurs requêtes pour les questions.
+Par exemple, ligne 91 ou ligne 172, vous verrez le bon format utilisé ailleurs!

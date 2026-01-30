@@ -1,0 +1,325 @@
+/* Lobby styles matching original lobby.html exactly */
+:root {
+  --bg:#0f1020; --card:#1b1f3b; --fg:#e8eaf6; --muted:#9aa0b4; --primary:#7c8cff;
+  --border:#2d335d; --good:#62d38a; --pill:#141732;
+  --header-height: 70px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; width: 100%; overflow-x: hidden; }
+body {
+  margin: 0;
+  color: var(--fg);
+  background: linear-gradient(180deg, #0f1020 0%, #1b1f3b 100%);
+  font: 16px/1.5 system-ui, Segoe UI, Inter, sans-serif;
+}
+
+.lobby-wrap {
+  min-height: 100vh;
+  width: 100%;
+  background: linear-gradient(180deg, #0f1020 0%, #1b1f3b 100%);
+}
+
+/* Header - fixed and responsive */
+.topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+  gap: clamp(8px, 2vw, 14px);
+  padding: 0 clamp(20px, 5vw, 60px);
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  z-index: 1000;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.4);
+}
+
+.back {
+  background: #141732;
+  color: #cfd4ff;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: clamp(6px, 1.5vw, 10px) clamp(10px, 2vw, 14px);
+  cursor: pointer;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-block;
+  font-size: clamp(13px, 1.5vw, 15px);
+  transition: all 0.2s;
+}
+
+.back:hover {
+  background: #1e2446;
+  border-color: var(--primary);
+}
+
+.brand {
+  font-size: clamp(20px, 3vw, 28px);
+  font-weight: 800;
+  margin: 0;
+  color: var(--primary);
+}
+
+/* Container - responsive width */
+.wrap {
+  max-width: 1800px;
+  margin: 0 auto;
+  width: 100%;
+  padding: clamp(20px, 3vw, 40px) clamp(15px, 3vw, 40px);
+  padding-top: calc(var(--header-height) + clamp(20px, 3vw, 40px));
+  padding-bottom: 120px;
+}
+
+.grid {
+  display: grid;
+  gap: clamp(16px, 2.5vw, 24px);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 450px), 1fr));
+}
+
+@media (min-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.panel {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: clamp(16px, 3vw, 28px);
+  box-shadow: 0 4px 20px rgba(0,0,0,.3);
+}
+
+.headerline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: clamp(12px, 2vw, 16px);
+}
+
+h2 {
+  margin: 0;
+  font-size: clamp(18px, 2.5vw, 24px);
+  font-weight: 800;
+}
+
+.refresh {
+  background: #141732;
+  color: #cfd4ff;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: clamp(5px, 1vw, 8px) clamp(8px, 1.5vw, 12px);
+  cursor: pointer;
+  font-size: clamp(12px, 1.5vw, 14px);
+  transition: all 0.2s;
+}
+
+.refresh:hover {
+  background: #1e2446;
+  border-color: var(--primary);
+}
+
+/* Room list - responsive */
+.room-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.room {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: clamp(10px, 1.5vw, 14px) 0;
+  border-bottom: 1px dashed #3a4273;
+  gap: 12px;
+}
+
+.room:last-child {
+  border-bottom: 0;
+}
+
+.room-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.room-name {
+  font-weight: 600;
+  margin-bottom: 4px;
+  font-size: clamp(14px, 1.8vw, 16px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.room-meta {
+  color: var(--muted);
+  font-size: clamp(12px, 1.5vw, 14px);
+}
+
+.join-btn {
+  background: var(--primary);
+  color: #101226;
+  border: 0;
+  border-radius: 10px;
+  padding: clamp(5px, 1vw, 8px) clamp(10px, 1.5vw, 14px);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: clamp(12px, 1.5vw, 14px);
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+
+.join-btn:hover {
+  background: #8a9aff;
+}
+
+.join-btn:disabled {
+  background: var(--muted);
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.empty {
+  padding: clamp(16px, 3vw, 24px) 0;
+  text-align: center;
+  color: var(--muted);
+  font-size: clamp(13px, 1.5vw, 15px);
+}
+
+/* Create room form - responsive */
+.form {
+  display: grid;
+  gap: clamp(12px, 2vw, 16px);
+}
+
+.group {
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.group legend {
+  font-weight: 700;
+  margin-bottom: clamp(6px, 1vw, 10px);
+  color: var(--fg);
+  font-size: clamp(13px, 1.8vw, 15px);
+}
+
+.input {
+  background: #141732;
+  border: 1px solid var(--border);
+  color: var(--fg);
+  padding: clamp(8px, 1.5vw, 12px) clamp(10px, 2vw, 14px);
+  border-radius: 10px;
+  width: 100%;
+  font: inherit;
+  font-size: clamp(13px, 1.5vw, 15px);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.select {
+  background: #141732;
+  border: 1px solid var(--border);
+  color: var(--fg);
+  padding: clamp(8px, 1.5vw, 12px) clamp(10px, 2vw, 14px);
+  border-radius: 10px;
+  width: 100%;
+  font: inherit;
+  cursor: pointer;
+  font-size: clamp(13px, 1.5vw, 15px);
+}
+
+.select:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+/* Action buttons (fixed) - responsive */
+.actions {
+  position: fixed;
+  right: clamp(16px, 3vw, 32px);
+  bottom: clamp(16px, 3vw, 32px);
+  z-index: 999;
+  display: flex;
+  gap: 10px;
+}
+
+.create, .join-random {
+  padding: clamp(10px, 2vw, 14px) clamp(14px, 2.5vw, 20px);
+  border: 0;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 800;
+  box-shadow: 0 8px 24px rgba(124, 140, 255, .35);
+  font-size: clamp(14px, 1.8vw, 16px);
+  transition: all 0.2s;
+}
+
+.create {
+  background: var(--primary);
+  color: #101226;
+}
+
+.create:hover {
+  background: #8a9aff;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(124, 140, 255, .5);
+}
+
+.join-random {
+  background: var(--good);
+  color: #101226;
+}
+
+.join-random:hover {
+  background: #70e09a;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(98, 211, 138, .5);
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+  :root {
+    --header-height: 60px;
+  }
+  
+  .wrap {
+    padding: 15px;
+    padding-top: calc(var(--header-height) + 15px);
+    padding-bottom: 140px;
+  }
+  
+  .grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .actions {
+    flex-direction: column;
+    right: 16px;
+  }
+  
+  .panel {
+    padding: 16px;
+  }
+}
+
+/* Safe area support */
+@supports (padding: max(0px)) {
+  .actions {
+    bottom: max(clamp(16px, 3vw, 32px), env(safe-area-inset-bottom));
+  }
+  .wrap {
+    padding-bottom: calc(120px + env(safe-area-inset-bottom));
+  }
+}

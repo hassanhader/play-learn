@@ -1,0 +1,38 @@
+=== SOLUTION FINALE ===
+
+Le problème est maintenant clair ! Dans gamesController.js ligne 172, on voit:
+
+    where: { gameId: game.id }
+
+Cela signifie que la colonne "gameId" dans les tables questions/levels 
+référence game.id (le numéro), PAS game.gameId (le string).
+
+FICHIER À MODIFIER:
+Tp_play_learn-Public_back\controllers\adminController.js
+
+LIGNES 235 et 240:
+
+ACTUELLEMENT (INCORRECT):
+    where: { gameId: game.gameId }
+
+DEVRAIT ÊTRE (CORRECT):
+    where: { gameId: game.id }
+
+OUI, c'est exactement ce que vous aviez au départ! 😅
+
+Le vrai problème était que Sequelize cherchait "Question.gameId" au lieu de juste "gameId".
+
+NOUVELLE SOLUTION:
+Ne pas utiliser les guillemets "Question.gameId" dans la requête, juste:
+
+    const questionCount = await Question.count({
+      where: { gameId: game.id }
+    })
+
+Vérifiez que dans adminController.js lignes 235-240, il n'y a PAS de 
+préfixe "Question." ou "Level." devant gameId!
+
+APRÈS MODIFICATION:
+1. Sauvegardez le fichier
+2. Redémarrez le serveur (Ctrl+C puis: node server.js)
+3. Rafraîchissez le navigateur

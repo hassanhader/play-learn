@@ -1,0 +1,27 @@
+=== FIX POUR adminController.js ===
+
+PROBLÈME:
+La colonne utilisée dans les requêtes Question.count() et Level.count() est incorrecte.
+Vous utilisez "game.id" mais la colonne réelle s'appelle "gameId" (pas "game_id").
+
+FICHIER: Tp_play_learn-Public_back\controllers\adminController.js
+
+LIGNE 235: Changer
+    where: { gameId: game.id }
+EN:
+    where: { gameId: game.gameId }
+
+LIGNE 240: Changer
+    where: { gameId: game.id }
+EN:
+    where: { gameId: game.gameId }
+
+EXPLICATION:
+- Dans la table games, il y a 2 champs: "id" (auto-increment) et "gameId" (string unique comme "math_01")
+- Les tables questions et levels utilisent "gameId" (string) comme clé étrangère, pas "id" (number)
+- Donc on doit chercher avec game.gameId au lieu de game.id
+
+APRÈS LE CHANGEMENT:
+1. Redémarrez le serveur backend (Ctrl+C puis node server.js)
+2. Rafraîchissez le navigateur (F5)
+3. Les jeux devraient s'afficher correctement
